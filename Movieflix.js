@@ -1,32 +1,32 @@
-const API_KEY = "c81b62667c7fc974b1d6c61dc88c3699";
+import API_KEY from "./config.js";
+
 const BASE_URL = "https://api.themoviedb.org/3";
 const IMG_BASE_URL = "https://image.tmdb.org/t/p/w500";
 const moviesContainer = document.getElementById("movies-container");
-const CURRENT_YEAR = new Date().getFullYear();
 
-async function fetchMovies(category, containerId, genreId = null, query = null) {
+async function fetchMovies(category, containerId, genreId = null, query = null, page = 1) {
     let url = "";
     if (genreId) {
-        url = `${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=${genreId}&sort_by=popularity.desc&vote_average.gte=7&vote_count.gte=1000`;
-    }
-    else {
+        url = `${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=${genreId}&sort_by=popularity.desc&vote_average.gte=7&vote_count.gte=1000&page=${page}`;
+    } else {
         if (category === "trending")
-            url = `${BASE_URL}/trending/movie/week?api_key=${API_KEY}`;
+            url = `${BASE_URL}/trending/movie/week?api_key=${API_KEY}&page=${page}`;
         else if (category === "popular")
-            url = `${BASE_URL}/movie/popular?api_key=${API_KEY}`;
+            url = `${BASE_URL}/movie/popular?api_key=${API_KEY}&page=${page}`;
         else if (category === "discover")
-            url = `${BASE_URL}/discover/movie?api_key=${API_KEY}&sort_by=vote_count.desc&with_original_language=en`;
+            url = `${BASE_URL}/discover/movie?api_key=${API_KEY}&sort_by=vote_count.desc&with_original_language=en&page=${page}`;
         else if (category === "discover_tv")
-            url = `${BASE_URL}/discover/tv?api_key=${API_KEY}&sort_by=vote_count.desc&with_original_language=en`;
+            url = `${BASE_URL}/discover/tv?api_key=${API_KEY}&sort_by=vote_count.desc&with_original_language=en&page=${page}`;
         else if (category === "top_rated")
-            url = `${BASE_URL}/movie/top_rated?api_key=${API_KEY}`;
+            url = `${BASE_URL}/movie/top_rated?api_key=${API_KEY}&page=${page}`;
         else if (category === "search")
-            url = `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${query}`
+            url = `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${query}&page=${page}`;
     }
     try {
         const res = await fetch(url);
         const data = await res.json();
         displayMovies(data.results, containerId);
+        updatePaginationControls(data.page, data.total_pages, category, containerId, genreId, query);
     } catch (error) {
         console.error("Error fetching movies:", error);
     }
