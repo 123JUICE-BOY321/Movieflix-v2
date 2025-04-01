@@ -1,5 +1,3 @@
-import API_KEY from "./config.js";
-
 const BASE_URL = "https://api.themoviedb.org/3";
 const IMG_BASE_URL = "https://image.tmdb.org/t/p/w500";
 const moviesContainer = document.getElementById("movies-container");
@@ -40,6 +38,8 @@ async function displayMovies(movies, containerId) {
         return;
     }
     for (let i = 0; i < movies.length; i++) {
+        if (!movies[i].poster_path)
+            continue;
         const movie = movies[i];
         const trailerUrl = await fetchTrailer(movie.id, containerId);
         const movieCard = document.createElement("div");
