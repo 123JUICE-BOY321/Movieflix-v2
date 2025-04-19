@@ -59,6 +59,10 @@
     </nav>
 
     <div class="container-fluid px-5 mt-5">
+        <div id="trending-carousel-container"></div>
+    </div>
+
+    <div class="container-fluid px-5 mt-5">
         <div class="h2 mb-3">Trending Movies</div>
         <div id="trending-movies" class="row row-cols-3 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 g-4"></div>
     </div>
@@ -81,6 +85,7 @@
     <script>
         fetchMovies("trending", "trending-movies", null, null, 1);
         fetchMovies("popular", "popular-movies", null, null, 1);
+        renderTrendingCarousel();
     </script>
 </body>
 </html>

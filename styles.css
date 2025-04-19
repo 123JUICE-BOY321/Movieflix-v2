@@ -3,6 +3,11 @@ body {
     color: white;
 }
 
+.carousel-image {
+    height: 400px;
+    object-fit: cover;
+}
+
 .flip-card {
     perspective: 1000px;
 }
