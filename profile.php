@@ -10,9 +10,22 @@
     </head>
     <body>
         <?php
-            if (session_status() === PHP_SESSION_NONE) {
-                session_start();
+            session_start();
+            if (!isset($_SESSION['user_id'])) {
+                header("Location: login.php");
+                exit();
             }
+
+            $host = 'localhost';
+            $dbname = 'movieflix2';
+            $user = 'root';
+            $pass = '1234';
+            $conn = new mysqli($host, $user, $pass, $dbname);
+
+            $user_id = $_SESSION['user_id'];
+            $result = $conn->query("SELECT username, email FROM users WHERE id=$user_id");
+            $userData = $result->fetch_assoc();
+            $conn->close();
         ?>
         <nav class="navbar navbar-expand-lg border-bottom border-body">
             <div class="container-fluid">
@@ -81,17 +94,46 @@
             </div>
         </nav>
 
-        <div class="container-fluid px-5 mt-5">
-            <div id="trending-carousel-container"></div>
-        </div>
-
-        <div class="container-fluid px-5 mt-5">
-            <div class="h2 mb-3">Trending Movies</div>
-            <div id="trending-movies" class="row row-cols-3 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 g-4"></div>
-        </div>
-        <div class="container-fluid px-5 mt-5">
-            <div class="h2 mb-3">Popular Movies</div>
-            <div id="popular-movies" class="row row-cols-3 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 g-4"></div>
+        <div class="container d-flex align-items-center justify-content-center">
+            <div class="card p-4 mt-5" style="width: 25rem;">
+                <div class="card-body">
+                    <h3 class="card-title text-center mb-4">Edit Profile</h3>
+                    <form action="profile-edit.php" method="POST">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" name="username"
+                                value="<?php echo htmlspecialchars($userData['username']) ?>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email"
+                                value="<?php echo htmlspecialchars($userData['email']) ?>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">New Password (leave blank to keep current)</label>
+                            <input type="password" class="form-control" id="password" name="new_password" minlength="8">
+                        </div>
+                        <div class="mb-3">
+                            <label for="confirm_password" class="form-label">Confirm New Password</label>
+                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" minlength="8">
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                        <?php
+                            if (isset($_SESSION['errors'])) {
+                                foreach ($_SESSION['errors'] as $error) {
+                                    echo "<div class='alert alert-danger text-center mt-2'>$error</div>";
+                                }
+                                unset($_SESSION['errors']);
+                            } elseif (isset($_SESSION['success'])) {
+                                echo "<div class='alert alert-success text-center mt-2'>{$_SESSION['success']}</div>";
+                                unset($_SESSION['success']);
+                            }
+                        ?>
+                    </form>
+                </div>
+            </div>
         </div>
 
         <footer class="bg-black text-white text-center py-3 mt-5 border-top">
@@ -102,13 +144,5 @@
                 </p>
             </div>
         </footer>
-
-        <script src="config.js"></script>
-        <script src="script.js"></script>
-        <script>
-            fetchMovies("trending", "trending-movies", null, null, 1);
-            fetchMovies("popular", "popular-movies", null, null, 1);
-            renderTrendingCarousel();
-        </script>
     </body>
 </html>

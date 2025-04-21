@@ -18,6 +18,7 @@
     if ($result->num_rows === 1) {
         $user = $result->fetch_assoc();
         if (password_verify($password, $user['password'])) {
+            $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
             unset($_SESSION['old_username']);
             unset($_SESSION['errors']);

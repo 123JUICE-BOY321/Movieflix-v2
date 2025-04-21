@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>MovieFlix</title>
+        <title>Discover Movies</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="styles.css">
@@ -82,17 +82,11 @@
         </nav>
 
         <div class="container-fluid px-5 mt-5">
-            <div id="trending-carousel-container"></div>
+            <div class="h2 mb-3">History</div>
+            <div id="history" class="row row-cols-3 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 g-4"></div>
         </div>
 
-        <div class="container-fluid px-5 mt-5">
-            <div class="h2 mb-3">Trending Movies</div>
-            <div id="trending-movies" class="row row-cols-3 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 g-4"></div>
-        </div>
-        <div class="container-fluid px-5 mt-5">
-            <div class="h2 mb-3">Popular Movies</div>
-            <div id="popular-movies" class="row row-cols-3 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 g-4"></div>
-        </div>
+        <div id="pagination" class="text-center my-4"></div>
 
         <footer class="bg-black text-white text-center py-3 mt-5 border-top">
             <div class="container">
@@ -106,9 +100,7 @@
         <script src="config.js"></script>
         <script src="script.js"></script>
         <script>
-            fetchMovies("trending", "trending-movies", null, null, 1);
-            fetchMovies("popular", "popular-movies", null, null, 1);
-            renderTrendingCarousel();
+            fetchHistoryMovies();
         </script>
     </body>
 </html>
